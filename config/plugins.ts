@@ -23,4 +23,14 @@ export default ({ env }) => ({
             amountLimit: 100,
         },
     },
+    email: {
+        provider: "sendgrid",
+        providerOptions: {
+            apiKey: env('SENDGRID_API_KEY'),
+        },
+        settings: {
+            defaultFrom: "esplendorrings@gmail.com",
+            defaultReplyTo: "esplendorrings@gmail.com"
+        },
+    },
 });
