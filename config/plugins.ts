@@ -24,13 +24,15 @@ export default ({ env }) => ({
         },
     },
     email: {
-        provider: "sendgrid",
-        providerOptions: {
-            apiKey: env('SENDGRID_API_KEY'),
-        },
-        settings: {
-            defaultFrom: "esplendorrings@gmail.com",
-            defaultReplyTo: "esplendorrings@gmail.com"
+        config: {
+            provider: 'sendgrid',
+            providerOptions: {
+                apiKey: env('SENDGRID_API_KEY'),
+            },
+            settings: {
+                defaultFrom: 'esplendorrings@gmail.com',
+                defaultReplyTo: 'esplendorrings@gmail.com',
+            },
         },
     },
 });
