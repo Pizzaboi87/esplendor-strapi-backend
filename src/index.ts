@@ -23,6 +23,9 @@ export default {
             t.string('homePhone');
             t.string('birthDate');
             t.string('country');
+            t.string('address');
+            t.string('city');
+            t.string('zipCode');
           },
         }),
       ]
