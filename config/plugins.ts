@@ -35,4 +35,15 @@ export default ({ env }) => ({
             },
         },
     },
+    'users-permissions': {
+        config: {
+            jwt: {
+                expiresIn: '1d',
+            },
+            ratelimit: {
+                interval: 60000,
+                max: 10,
+            },
+        },
+    },
 });
