@@ -52,7 +52,9 @@ export default (plugin: any) => {
         'country',
         'address',
         'city',
-        'zipCode'
+        'zipCode',
+        'discount',
+        'used_coupons',
       ];
 
       const dataToUpdate = Object.keys(body).reduce((acc: any, key: string) => {
