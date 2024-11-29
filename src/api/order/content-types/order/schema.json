@@ -52,6 +52,9 @@
     },
     "lastName": {
       "type": "string"
+    },
+    "discount": {
+      "type": "decimal"
     }
   }
 }
