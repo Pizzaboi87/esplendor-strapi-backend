@@ -97,6 +97,18 @@
       "relation": "oneToMany",
       "target": "api::order.order",
       "mappedBy": "owner"
+    },
+    "used_coupons": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::coupon.coupon",
+      "mappedBy": "users"
+    },
+    "discount": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::discount.discount",
+      "inversedBy": "users"
     }
   }
 }

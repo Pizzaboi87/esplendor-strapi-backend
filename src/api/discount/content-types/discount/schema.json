@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "discounts",
+  "info": {
+    "singularName": "discount",
+    "pluralName": "discounts",
+    "displayName": "Discount",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "users": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "discount"
+    },
+    "value": {
+      "type": "decimal"
+    },
+    "stripeID": {
+      "type": "string"
+    }
+  }
+}

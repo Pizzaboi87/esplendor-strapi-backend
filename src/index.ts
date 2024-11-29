@@ -19,6 +19,23 @@ export default {
             t.string('address');
             t.string('city');
             t.string('zipCode');
+            t.list.field('used_coupons', {
+              type: 'Coupon',
+              resolve(parent, args, ctx) {
+                return strapi.entityService.findMany('api::coupon.coupon', {
+                  filters: { users: parent.id },
+                });
+              },
+            });
+            t.field('discount', {
+              type: 'Discount',
+              resolve(parent, args, ctx) {
+                return strapi.entityService.findMany('api::discount.discount', {
+                  filters: { users: parent.id },
+                  limit: 1,
+                }).then(results => results[0] || null);
+              },
+            });
           },
         }),
 
@@ -85,6 +102,38 @@ export default {
                 }
               },
             });
+
+            // Get details of a specific coupon
+            t.field('coupon', {
+              type: 'Coupon',
+              args: {
+                code: nexus.nonNull(nexus.stringArg()),
+              },
+              async resolve(parent, args, ctx) {
+                const { state } = ctx;
+
+                if (!state.user) {
+                  throw new Error('You must be logged in to view coupon details.');
+                }
+
+                try {
+                  const [coupon] = await strapi.entityService.findMany('api::coupon.coupon', {
+                    filters: { code: args.code },
+                    populate: ['*'],
+                  });
+
+                  if (!coupon) {
+                    throw new Error('Coupon not found.');
+                  }
+
+                  return coupon;
+                } catch (error) {
+                  console.error('Error fetching coupon:', error);
+                  throw new Error('Failed to fetch coupon details.');
+                }
+              },
+            });
+
           },
         }),
 

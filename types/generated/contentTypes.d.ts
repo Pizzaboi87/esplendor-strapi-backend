@@ -465,6 +465,77 @@ export interface ApiColorColor extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCouponCoupon extends Struct.CollectionTypeSchema {
+  collectionName: 'coupons';
+  info: {
+    description: '';
+    displayName: 'Coupon';
+    pluralName: 'coupons';
+    singularName: 'coupon';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    code: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    isActive: Schema.Attribute.Boolean;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::coupon.coupon'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    stripeID: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    users: Schema.Attribute.Relation<
+      'manyToMany',
+      'plugin::users-permissions.user'
+    >;
+    value: Schema.Attribute.Decimal;
+  };
+}
+
+export interface ApiDiscountDiscount extends Struct.CollectionTypeSchema {
+  collectionName: 'discounts';
+  info: {
+    description: '';
+    displayName: 'Discount';
+    pluralName: 'discounts';
+    singularName: 'discount';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::discount.discount'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    stripeID: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    users: Schema.Attribute.Relation<
+      'oneToMany',
+      'plugin::users-permissions.user'
+    >;
+    value: Schema.Attribute.Decimal;
+  };
+}
+
 export interface ApiHighlightHighlight extends Struct.CollectionTypeSchema {
   collectionName: 'highlights';
   info: {
@@ -1044,6 +1115,7 @@ export interface PluginUsersPermissionsUser
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    discount: Schema.Attribute.Relation<'manyToOne', 'api::discount.discount'>;
     email: Schema.Attribute.Email &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
@@ -1075,6 +1147,7 @@ export interface PluginUsersPermissionsUser
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    used_coupons: Schema.Attribute.Relation<'manyToMany', 'api::coupon.coupon'>;
     username: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique &
@@ -1098,6 +1171,8 @@ declare module '@strapi/strapi' {
       'api::article.article': ApiArticleArticle;
       'api::category.category': ApiCategoryCategory;
       'api::color.color': ApiColorColor;
+      'api::coupon.coupon': ApiCouponCoupon;
+      'api::discount.discount': ApiDiscountDiscount;
       'api::highlight.highlight': ApiHighlightHighlight;
       'api::order.order': ApiOrderOrder;
       'api::product.product': ApiProductProduct;
