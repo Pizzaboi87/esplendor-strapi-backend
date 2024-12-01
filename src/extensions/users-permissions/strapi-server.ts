@@ -55,6 +55,7 @@ export default (plugin: any) => {
         'zipCode',
         'discount',
         'used_coupons',
+        'wishlist'
       ];
 
       const dataToUpdate = Object.keys(body).reduce((acc: any, key: string) => {

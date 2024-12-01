@@ -27,6 +27,14 @@ export default {
                 });
               },
             });
+            t.list.field('wishlist', {
+              type: 'Product',
+              resolve(parent, args, ctx) {
+                return strapi.entityService.findMany('api::product.product', {
+                  filters: { users: parent.id },
+                });
+              },
+            });
             t.field('discount', {
               type: 'Discount',
               resolve(parent, args, ctx) {
