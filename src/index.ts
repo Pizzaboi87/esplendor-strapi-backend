@@ -103,6 +103,66 @@ export default {
               },
             });
 
+            // Cart details of the currently logged in user
+            t.list.field('carts', {
+              type: 'Cart',
+              async resolve(parent, args, ctx) {
+                const { state } = ctx;
+
+                if (!state.user) {
+                  throw new Error('You must be logged in to view your cart.');
+                }
+
+                try {
+                  const carts = await strapi.entityService.findMany('api::cart.cart', {
+                    filters: {
+                      user: state.user.id,
+                    },
+                    populate: ['user'],
+                  });
+
+                  return carts;
+                } catch (error) {
+                  console.error('Error fetching carts:', error);
+                  throw new Error('Failed to fetch carts.');
+                }
+              },
+            });
+
+            // Details of a cart
+            t.field('cart', {
+              type: 'Cart',
+              args: {
+                id: nexus.nonNull(nexus.idArg())
+              },
+              async resolve(parent, args, ctx) {
+                const { state } = ctx;
+
+                if (!state.user) {
+                  throw new Error('You must be logged in to view your cart details.');
+                }
+
+                try {
+                  const cart = await strapi.entityService.findOne('api::cart.cart', args.id, {
+                    populate: ['user'],
+                  });
+
+                  if (!cart) {
+                    throw new Error('Cart not found.');
+                  }
+
+                  if (cart.user.id !== state.user.id) {
+                    throw new Error('You can only view your own cart.');
+                  }
+
+                  return cart;
+                } catch (error) {
+                  console.error('Error fetching cart:', error);
+                  throw new Error('Failed to fetch cart details.');
+                }
+              },
+            });
+
             // Get details of a specific coupon
             t.field('coupon', {
               type: 'Coupon',
@@ -214,6 +274,39 @@ export default {
                 } catch (error) {
                   console.error('Error creating order:', error);
                   throw new Error('Failed to create order.');
+                }
+              },
+            });
+
+            t.field('createCart', {
+              type: 'Cart',
+              args: {
+                data: nexus.nonNull(nexus.arg({ type: 'CartInput' }))
+              },
+              async resolve(parent, args, ctx) {
+                const { state } = ctx;
+
+                if (!state.user) {
+                  throw new Error('You must be logged in to create a cart.');
+                }
+
+                try {
+                  // Create the new cart
+                  const newCart = await strapi.entityService.create('api::cart.cart', {
+                    data: {
+                      ...args.data,
+                      user: state.user.id,
+                    },
+                    populate: ['user'],
+                  });
+
+                  console.log("Created Cart:", newCart);
+
+                  // Return the new cart
+                  return newCart;
+                } catch (error) {
+                  console.error('Error creating cart:', error);
+                  throw new Error('Failed to create cart.');
                 }
               },
             });

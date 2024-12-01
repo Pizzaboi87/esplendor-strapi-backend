@@ -109,6 +109,12 @@
       "relation": "manyToOne",
       "target": "api::discount.discount",
       "inversedBy": "users"
+    },
+    "cart": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::cart.cart",
+      "mappedBy": "user"
     }
   }
 }
